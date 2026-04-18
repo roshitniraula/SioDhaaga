@@ -1,47 +1,11 @@
-import Image from "next/image";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { HeroCarousel } from "@/components/HeroCarousel";
 import { CategoryTile } from "@/components/CategoryTile";
 import { ProductGrid } from "@/components/ProductGrid";
 import { Container, Eyebrow, Button } from "@/components/ui";
 import { featuredProducts } from "@/lib/products";
 import { categories } from "@/lib/categories";
-
-/* ── Hero ──────────────────────────────────────────────────────────── */
-function Hero() {
-  return (
-    <section className="flex flex-col md:flex-row min-h-screen">
-      {/* Image — left 60% on desktop, full width on mobile */}
-      <div className="relative w-full md:w-[60%] h-[60vh] md:h-auto">
-        <Image
-          src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1400&q=85"
-          alt="TODO: replace with brand photography — hero editorial"
-          fill
-          priority
-          className="object-cover object-center"
-          sizes="(max-width: 768px) 100vw, 60vw"
-        />
-      </div>
-
-      {/* Text — right 40% on desktop */}
-      <div className="w-full md:w-[40%] bg-[--color-ivory] flex items-center">
-        <div className="px-8 py-16 md:py-0 md:px-14 xl:px-20 md:pt-24">
-          <Eyebrow className="mb-8">New season</Eyebrow>
-          <h1 className="type-h1 text-[--color-walnut] mb-7">
-            A thread of honest luxury.
-          </h1>
-          <p className="type-body text-[--color-walnut-soft] mb-10 max-w-sm leading-[1.7]">
-            Luxury-grade garments, priced without the markup.
-            Made slowly, sold honestly.
-          </p>
-          <Button variant="text" href="/shop">
-            Shop the collection →
-          </Button>
-        </div>
-      </div>
-    </section>
-  );
-}
 
 /* ── Category tiles ─────────────────────────────────────────────────── */
 function ShopByCategory() {
@@ -136,7 +100,7 @@ export default function HomePage() {
     <>
       <Header />
       <main>
-        <Hero />
+        <HeroCarousel />
         <ShopByCategory />
         <FeaturedPieces />
         <BrandPromise />
