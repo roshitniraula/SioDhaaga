@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { Container } from "./ui";
+import { useCart } from "@/lib/cart-context";
 
 /* ── Icons ─────────────────────────────────────────────────────── */
 function IconSearch() {
@@ -52,19 +53,13 @@ function IconClose() {
     </svg>
   );
 }
-function IconChevron() {
-  return (
-    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true" className="inline ml-0.5 translate-y-px">
-      <path d="M2 4l3 3 3-3" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
 
 /* ── Mega-nav data ──────────────────────────────────────────────── */
 type NavColumn = { heading: string; links: { label: string; href: string }[] };
 type NavDropdown = {
   columns: NavColumn[];
   editorial: { image: string; caption: string; href: string };
+  utilityLinks: { label: string; href: string }[];
 };
 type NavItem = { label: string; href?: string; dropdown?: NavDropdown };
 
@@ -105,11 +100,15 @@ const navItems: NavItem[] = [
       ],
       editorial: {
         // TODO: replace with brand photography — The Sable Shirt
-        image:
-          "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=400&q=85",
+        image: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=400&q=85",
         caption: "The Sable Shirt — Washed linen, made slowly.",
         href: "/products/sable-shirt",
       },
+      utilityLinks: [
+        { label: "Size guide", href: "/size-guide" },
+        { label: "Shipping", href: "/shipping" },
+        { label: "Returns", href: "/returns" },
+      ],
     },
   },
   {
@@ -148,11 +147,15 @@ const navItems: NavItem[] = [
       ],
       editorial: {
         // TODO: replace with brand photography — The Drift Trouser
-        image:
-          "https://images.unsplash.com/photo-1583744946564-b52ac1c389c8?auto=format&fit=crop&w=400&q=85",
+        image: "https://images.unsplash.com/photo-1583744946564-b52ac1c389c8?auto=format&fit=crop&w=400&q=85",
         caption: "The Drift Trouser — Cotton canvas, cut clean.",
         href: "/products/drift-trouser",
       },
+      utilityLinks: [
+        { label: "Size guide", href: "/size-guide" },
+        { label: "Shipping", href: "/shipping" },
+        { label: "Returns", href: "/returns" },
+      ],
     },
   },
   {
@@ -187,11 +190,15 @@ const navItems: NavItem[] = [
       ],
       editorial: {
         // TODO: replace with brand photography — The Still Hoodie
-        image:
-          "https://images.unsplash.com/photo-1556821840-3a63f15732ce?auto=format&fit=crop&w=400&q=85",
+        image: "https://images.unsplash.com/photo-1556821840-3a63f15732ce?auto=format&fit=crop&w=400&q=85",
         caption: "The Still Hoodie — Brushed cotton, built to outlast.",
         href: "/products/still-hoodie",
       },
+      utilityLinks: [
+        { label: "Size guide", href: "/size-guide" },
+        { label: "Fabric guide", href: "/fabric-guide" },
+        { label: "Returns", href: "/returns" },
+      ],
     },
   },
   {
@@ -228,20 +235,57 @@ const navItems: NavItem[] = [
       ],
       editorial: {
         // TODO: replace with brand photography — The Indigo Jean
-        image:
-          "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=400&q=85",
+        image: "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=400&q=85",
         caption: "The Indigo Jean — Selvedge, ages with you.",
         href: "/products/indigo-jean",
       },
+      utilityLinks: [
+        { label: "Size guide", href: "/size-guide" },
+        { label: "Care guide", href: "/care-guide" },
+        { label: "Returns", href: "/returns" },
+      ],
     },
   },
   { label: "Journal", href: "/journal" },
 ];
 
+/* ── Nav link — uppercase with animated underline ───────────────── */
+function NavLink({
+  item,
+  active,
+  onEnter,
+}: {
+  item: NavItem;
+  active: boolean;
+  onEnter: () => void;
+}) {
+  const base =
+    "relative type-eyebrow text-[11px] text-[--color-walnut] tracking-[0.1em] transition-colors duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[--color-sage] after:absolute after:bottom-[-2px] after:left-0 after:h-px after:bg-[--color-walnut] after:transition-[width] after:duration-200 after:ease-[cubic-bezier(0.4,0,0.2,1)]";
+  const underline = active ? "after:w-full" : "after:w-0 hover:after:w-full";
+
+  if (item.dropdown) {
+    return (
+      <button
+        onMouseEnter={onEnter}
+        aria-expanded={active}
+        aria-haspopup="true"
+        className={`${base} ${underline}`}
+      >
+        {item.label}
+      </button>
+    );
+  }
+  return (
+    <Link href={item.href ?? "#"} className={`${base} ${underline}`}>
+      {item.label}
+    </Link>
+  );
+}
+
 /* ── Mega-nav dropdown panel ────────────────────────────────────── */
 function MegaNavPanel({ dropdown }: { dropdown: NavDropdown }) {
   return (
-    <div className="w-full bg-white border-b border-[--color-line]">
+    <div className="w-full bg-[--color-header] border-b border-[rgba(60,45,30,0.08)]">
       <Container className="py-10">
         <div className="flex gap-12">
           {/* Columns */}
@@ -283,6 +327,27 @@ function MegaNavPanel({ dropdown }: { dropdown: NavDropdown }) {
             </p>
           </Link>
         </div>
+
+        {/* Utility footer row */}
+        <div className="flex items-center justify-between mt-8 pt-6 border-t border-[rgba(60,45,30,0.06)]">
+          <Link
+            href="/shop"
+            className="inline-flex items-center h-8 px-4 bg-[--color-ink] text-[--color-ivory] type-eyebrow text-[10px] tracking-[0.12em] hover:bg-[--color-walnut] transition-colors"
+          >
+            Shop new arrivals
+          </Link>
+          <div className="flex items-center gap-5">
+            {dropdown.utilityLinks.map((u) => (
+              <Link
+                key={u.label}
+                href={u.href}
+                className="type-small text-[--color-muted] hover:text-[--color-ink] transition-colors"
+              >
+                {u.label}
+              </Link>
+            ))}
+          </div>
+        </div>
       </Container>
     </div>
   );
@@ -295,28 +360,29 @@ export function Header() {
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const openTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const headerRef = useRef<HTMLElement>(null);
+  const { itemCount, toggleCart } = useCart();
 
-  // Scroll detection
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Mobile scroll lock
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [mobileOpen]);
 
-  // Escape key closes dropdown
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setActiveMenu(null); };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setActiveMenu(null);
+    };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
   }, []);
 
-  // Click outside closes dropdown
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
       if (headerRef.current && !headerRef.current.contains(e.target as Node)) {
@@ -337,21 +403,19 @@ export function Header() {
     setActiveMenu(null);
   }
 
-  const showSolid = scrolled || !!activeMenu;
-  const headerBg = showSolid
-    ? "bg-[--color-ivory] border-b border-[--color-line]"
-    : "bg-transparent border-b border-transparent";
-
   const activeDropdown = navItems.find((n) => n.label === activeMenu)?.dropdown;
+
+  const shadowClass = scrolled
+    ? "shadow-[0_1px_0_rgba(0,0,0,0.03),0_4px_12px_rgba(0,0,0,0.04)]"
+    : "";
 
   return (
     <>
       <header
         ref={headerRef}
-        className={`fixed top-0 left-0 right-0 z-50 transition-[background-color,border-color] duration-[400ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${headerBg}`}
+        className={`fixed top-0 left-0 right-0 z-50 bg-[--color-header] border-b border-[rgba(60,45,30,0.08)] transition-shadow duration-300 ${shadowClass}`}
         onMouseLeave={handleNavLeave}
       >
-        {/* ── Nav bar ─────────────────────────────────────── */}
         <Container>
           <div className="flex items-center justify-between h-16 md:h-20">
 
@@ -375,69 +439,58 @@ export function Header() {
 
             {/* Center nav — desktop */}
             <nav className="hidden md:flex items-center gap-10">
-              {navItems.map((item) =>
-                item.dropdown ? (
-                  <button
-                    key={item.label}
-                    onMouseEnter={() => handleNavEnter(item.label)}
-                    className={`type-small transition-colors duration-[400ms] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[--color-sage] ${
-                      activeMenu === item.label
-                        ? "text-[--color-sage]"
-                        : "text-[--color-walnut] hover:text-[--color-sage]"
-                    }`}
-                    aria-expanded={activeMenu === item.label}
-                    aria-haspopup="true"
-                  >
-                    {item.label}
-                    <IconChevron />
-                  </button>
-                ) : (
-                  <Link
-                    key={item.label}
-                    href={item.href ?? "#"}
-                    className="type-small text-[--color-muted] cursor-default select-none"
-                    aria-disabled="true"
-                  >
-                    {item.label}
-                  </Link>
-                )
-              )}
+              {navItems.map((item) => (
+                <NavLink
+                  key={item.label}
+                  item={item}
+                  active={activeMenu === item.label}
+                  onEnter={() => handleNavEnter(item.label)}
+                />
+              ))}
             </nav>
 
             {/* Right icons */}
             <div className="flex items-center gap-4 text-[--color-walnut]">
-              <button aria-label="Search" className="hidden md:flex hover:text-[--color-sage] transition-colors duration-[400ms]">
+              <button
+                aria-label="Search"
+                className="hidden md:flex hover:text-[--color-sage] transition-colors duration-[400ms]"
+              >
                 <IconSearch />
               </button>
-              <button aria-label="Account" className="hidden md:flex hover:text-[--color-sage] transition-colors duration-[400ms]">
+              <button
+                aria-label="Account"
+                className="hidden md:flex hover:text-[--color-sage] transition-colors duration-[400ms]"
+              >
                 <IconAccount />
               </button>
-              <Link href="/cart" aria-label="Cart" className="hover:text-[--color-sage] transition-colors duration-[400ms]">
-                <IconCart count={0} />
-              </Link>
+              <button
+                aria-label="Open cart"
+                onClick={toggleCart}
+                className="hover:text-[--color-sage] transition-colors duration-[400ms]"
+              >
+                <IconCart count={itemCount} />
+              </button>
             </div>
-
           </div>
         </Container>
 
-        {/* ── Mega-nav dropdown panel — desktop only ────── */}
-        {/* max-height animation keeps panel fully opaque; no opacity transition */}
+        {/* Mega-nav dropdown */}
         <div
           className="hidden md:block overflow-hidden transition-[max-height] duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] motion-reduce:transition-none"
-          style={{ maxHeight: activeDropdown ? "480px" : "0" }}
+          style={{ maxHeight: activeDropdown ? "520px" : "0" }}
         >
           {activeDropdown && <MegaNavPanel dropdown={activeDropdown} />}
         </div>
       </header>
 
-      {/* ── Mobile drawer ────────────────────────────────── */}
+      {/* Mobile drawer */}
       {mobileOpen && (
         <div className="fixed inset-0 z-[60] md:hidden">
           <div
             className="absolute inset-0 bg-[--color-walnut]/40"
             onClick={() => setMobileOpen(false)}
           />
-          <div className="absolute inset-y-0 left-0 w-4/5 max-w-xs bg-[--color-ivory] flex flex-col px-8 py-10">
+          <div className="absolute inset-y-0 left-0 w-4/5 max-w-xs bg-[--color-header] flex flex-col px-8 py-10">
             <button
               className="self-end text-[--color-walnut] mb-10 -mr-2 p-1"
               onClick={() => setMobileOpen(false)}

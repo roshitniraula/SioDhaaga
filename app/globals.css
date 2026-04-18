@@ -12,6 +12,11 @@
   --color-muted:       #9A8F80;
   --color-error:       #9B4A3E;
   --color-success:     #6B7463;
+  /* Phase 4 warm additions */
+  --color-bg:          #F2EBE0;  /* body warm cream — warmer than ivory */
+  --color-header:      #F7F4EE;  /* header surface — lighter than body */
+  --color-ink:         #2A2420;  /* deep warm charcoal, not pure black */
+  --grain-opacity:     0.025;    /* paper grain — set to 0 to disable */
 }
 
 /* ─── Tailwind v4 theme ─────────────────────────────────────────── */
@@ -30,6 +35,9 @@
   --font-display: var(--font-cormorant), Georgia, serif;
   --font-body:    var(--font-inter), system-ui, sans-serif;
   --font-sans:    var(--font-inter), system-ui, sans-serif;
+  --color-bg:          var(--color-bg);
+  --color-header:      var(--color-header);
+  --color-ink:         var(--color-ink);
 }
 
 /* ─── Base resets ───────────────────────────────────────────────── */
@@ -41,8 +49,8 @@
   }
 
   html {
-    background-color: var(--color-ivory);
-    color: var(--color-walnut);
+    background-color: var(--color-bg);
+    color: var(--color-ink);
     font-family: var(--font-inter), system-ui, sans-serif;
     font-size: 16px;
     line-height: 1.6;
@@ -50,10 +58,22 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* No pure black or white — everything is warm */
+  /* Warm cream body — no pure black or white */
   body {
-    background-color: var(--color-ivory);
-    color: var(--color-walnut);
+    background-color: var(--color-bg);
+    color: var(--color-ink);
+    position: relative;
+  }
+
+  /* Paper grain overlay — toggle via --grain-opacity */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    opacity: var(--grain-opacity);
+    pointer-events: none;
+    z-index: 9997;
   }
 
   /* Scrollbar — minimal */
