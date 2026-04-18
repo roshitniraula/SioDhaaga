@@ -75,6 +75,7 @@ export function HeroCarousel() {
   const [hovered, setHovered] = useState(false);
   const [tabHidden, setTabHidden] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
+  const [navOpen, setNavOpen] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const touchStartX = useRef<number | null>(null);
 
@@ -94,7 +95,14 @@ export function HeroCarousel() {
     return () => document.removeEventListener("visibilitychange", onVisibility);
   }, []);
 
-  const paused = hovered || tabHidden || reducedMotion;
+  // Pause when mega-nav dropdown is open
+  useEffect(() => {
+    const handler = (e: Event) => setNavOpen((e as CustomEvent<{ open: boolean }>).detail.open);
+    document.addEventListener("sio:nav", handler);
+    return () => document.removeEventListener("sio:nav", handler);
+  }, []);
+
+  const paused = hovered || tabHidden || reducedMotion || navOpen;
 
   const goNext = useCallback(() => setCurrent((p) => (p + 1) % slides.length), []);
   const goPrev = useCallback(() => setCurrent((p) => (p - 1 + slides.length) % slides.length), []);
@@ -153,8 +161,8 @@ export function HeroCarousel() {
           </div>
         ))}
 
-        {/* Arrows — desktop only */}
-        <div className="hidden md:flex absolute inset-y-0 left-0 right-0 items-center justify-between px-5 pointer-events-none z-10">
+        {/* Arrows — desktop only, hidden when nav dropdown is open */}
+        <div className={`hidden md:flex absolute inset-y-0 left-0 right-0 items-center justify-between px-5 pointer-events-none z-10 transition-opacity duration-200 ${navOpen ? "opacity-0" : "opacity-100"}`}>
           <button
             onClick={goPrev}
             aria-label="Previous slide"
@@ -177,7 +185,7 @@ export function HeroCarousel() {
 
         {/* Pagination dots */}
         <div
-          className="absolute bottom-5 left-0 right-0 flex items-center justify-center gap-2 z-10"
+          className={`absolute bottom-5 left-0 right-0 flex items-center justify-center gap-2 z-10 transition-opacity duration-200 ${navOpen ? "opacity-0 pointer-events-none" : "opacity-100"}`}
           role="tablist"
           aria-label="Slides"
         >

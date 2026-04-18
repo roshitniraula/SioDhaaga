@@ -99,8 +99,8 @@ const navItems: NavItem[] = [
         },
       ],
       editorial: {
-        // TODO: replace with brand photography — The Sable Shirt
-        image: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=400&q=85",
+        // TODO: replace with brand photography — The Sable Shirt (linen shirt, warm neutral light)
+        image: "https://images.unsplash.com/photo-1551489186-cf8726f514f8?auto=format&fit=crop&w=800&q=90",
         caption: "The Sable Shirt — Washed linen, made slowly.",
         href: "/products/sable-shirt",
       },
@@ -146,8 +146,8 @@ const navItems: NavItem[] = [
         },
       ],
       editorial: {
-        // TODO: replace with brand photography — The Drift Trouser
-        image: "https://images.unsplash.com/photo-1583744946564-b52ac1c389c8?auto=format&fit=crop&w=400&q=85",
+        // TODO: replace with brand photography — The Drift Trouser (cotton trousers, neutral warm)
+        image: "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?auto=format&fit=crop&w=800&q=90",
         caption: "The Drift Trouser — Cotton canvas, cut clean.",
         href: "/products/drift-trouser",
       },
@@ -189,8 +189,8 @@ const navItems: NavItem[] = [
         },
       ],
       editorial: {
-        // TODO: replace with brand photography — The Still Hoodie
-        image: "https://images.unsplash.com/photo-1556821840-3a63f15732ce?auto=format&fit=crop&w=400&q=85",
+        // TODO: replace with brand photography — The Still Hoodie (cream hoodie, warm light)
+        image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&w=800&q=90",
         caption: "The Still Hoodie — Brushed cotton, built to outlast.",
         href: "/products/still-hoodie",
       },
@@ -234,8 +234,8 @@ const navItems: NavItem[] = [
         },
       ],
       editorial: {
-        // TODO: replace with brand photography — The Indigo Jean
-        image: "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=400&q=85",
+        // TODO: replace with brand photography — The Indigo Jean (raw indigo denim fabric close-up)
+        image: "https://images.unsplash.com/photo-1588099768523-f4e6a5679d88?auto=format&fit=crop&w=800&q=90",
         caption: "The Indigo Jean — Selvedge, ages with you.",
         href: "/products/indigo-jean",
       },
@@ -285,7 +285,12 @@ function NavLink({
 /* ── Mega-nav dropdown panel ────────────────────────────────────── */
 function MegaNavPanel({ dropdown }: { dropdown: NavDropdown }) {
   return (
-    <div className="w-full bg-[--color-header] border-b border-[rgba(60,45,30,0.08)]">
+    /* Inline backgroundColor guarantees solid surface — Tailwind JIT may not include
+       the new --color-header token class if it wasn't in a prior build cache. */
+    <div
+      className="w-full border-b border-[rgba(60,45,30,0.08)]"
+      style={{ backgroundColor: "#F7F4EE" }}
+    >
       <Container className="py-10">
         <div className="flex gap-12">
           {/* Columns */}
@@ -309,10 +314,11 @@ function MegaNavPanel({ dropdown }: { dropdown: NavDropdown }) {
             ))}
           </div>
 
-          {/* Editorial card */}
+          {/* Editorial card — 4:5 portrait, warm fabric/garment image */}
           <Link
             href={dropdown.editorial.href}
-            className="group relative w-48 shrink-0 overflow-hidden rounded-[2px] bg-[--color-bone]"
+            className="group relative shrink-0 overflow-hidden rounded-[2px] bg-[--color-bone]"
+            style={{ width: 192, height: 240 }}
           >
             <Image
               src={dropdown.editorial.image}
@@ -321,18 +327,19 @@ function MegaNavPanel({ dropdown }: { dropdown: NavDropdown }) {
               className="object-cover transition-transform duration-[600ms] ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:scale-[1.03]"
               sizes="192px"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#3D2E22]/60 via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#3D2E22]/70 via-transparent to-transparent" />
             <p className="absolute bottom-0 left-0 right-0 p-4 type-small text-[--color-ivory] leading-snug">
               {dropdown.editorial.caption}
             </p>
           </Link>
         </div>
 
-        {/* Utility footer row */}
-        <div className="flex items-center justify-between mt-8 pt-6 border-t border-[rgba(60,45,30,0.06)]">
+        {/* Utility footer row — inside the panel, below the content */}
+        <div className="flex items-center justify-between mt-8 pt-5 border-t border-[rgba(60,45,30,0.06)]">
           <Link
             href="/shop"
-            className="inline-flex items-center h-8 px-4 bg-[--color-ink] text-[--color-ivory] type-eyebrow text-[10px] tracking-[0.12em] hover:bg-[--color-walnut] transition-colors"
+            className="inline-flex items-center h-8 px-4 type-eyebrow text-[10px] tracking-[0.12em] transition-colors"
+            style={{ backgroundColor: "#2A2420", color: "#F5F1EA" }}
           >
             Shop new arrivals
           </Link>
@@ -341,7 +348,7 @@ function MegaNavPanel({ dropdown }: { dropdown: NavDropdown }) {
               <Link
                 key={u.label}
                 href={u.href}
-                className="type-small text-[--color-muted] hover:text-[--color-ink] transition-colors"
+                className="type-small text-[--color-muted] hover:text-[--color-walnut] transition-colors"
               >
                 {u.label}
               </Link>
@@ -402,6 +409,13 @@ export function Header() {
     if (openTimeoutRef.current) clearTimeout(openTimeoutRef.current);
     setActiveMenu(null);
   }
+
+  // Notify HeroCarousel to pause when a dropdown is open
+  useEffect(() => {
+    document.dispatchEvent(
+      new CustomEvent("sio:nav", { detail: { open: !!activeMenu } })
+    );
+  }, [activeMenu]);
 
   const activeDropdown = navItems.find((n) => n.label === activeMenu)?.dropdown;
 
@@ -474,10 +488,13 @@ export function Header() {
           </div>
         </Container>
 
-        {/* Mega-nav dropdown */}
+        {/* Mega-nav dropdown — wrapper has explicit bg so it's opaque even before MegaNavPanel mounts */}
         <div
           className="hidden md:block overflow-hidden transition-[max-height] duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] motion-reduce:transition-none"
-          style={{ maxHeight: activeDropdown ? "520px" : "0" }}
+          style={{
+            maxHeight: activeDropdown ? "600px" : "0",
+            backgroundColor: "#F7F4EE",
+          }}
         >
           {activeDropdown && <MegaNavPanel dropdown={activeDropdown} />}
         </div>
