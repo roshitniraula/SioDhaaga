@@ -24,7 +24,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 export default function StyleguidePage() {
   return (
-    <main className="bg-[--color-ivory] min-h-screen">
+    <main className="min-h-screen" style={{ background: `linear-gradient(135deg, var(--color-bone) 0%, var(--color-line) 100%)` }}>
       <div className="bg-[--color-walnut] text-[--color-ivory] py-4">
         <Container>
           <p className="type-small">SioDhaga — Design System</p>
@@ -109,7 +109,7 @@ export default function StyleguidePage() {
                 <p className="type-small text-[--color-muted]">13px / 1.5</p>
               </div>
               <p className="type-small text-[--color-walnut-soft]">
-                Ships from India in 10–14 business days. Duties and taxes included.
+                Made slowly, by makers we know.
               </p>
             </div>
 
