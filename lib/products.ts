@@ -70,3 +70,48 @@ export const featuredProducts: Product[] = [
       "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=600&q=85",
   },
 ];
+
+export const shopTheLookProducts: Product[] = [
+  {
+    id: "5",
+    name: "The Linen Overshirt",
+    price: 68,
+    category: "Women",
+    fabric: "Washed Linen",
+    color: "Sand",
+    handle: "linen-overshirt",
+    image:
+      "https://images.unsplash.com/photo-1607522370275-f14206abe5d3?auto=format&fit=crop&w=600&q=85",
+    imageAlt: "TODO: replace with brand photography — The Linen Overshirt in Sand",
+    hoverImage:
+      "https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?auto=format&fit=crop&w=600&q=85",
+  },
+  {
+    id: "6",
+    name: "The Merino Crew",
+    price: 58,
+    category: "Unisex",
+    fabric: "Merino Wool",
+    color: "Oat",
+    handle: "merino-crew",
+    image:
+      "https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&w=600&q=85",
+    imageAlt: "TODO: replace with brand photography — The Merino Crew in Oat",
+    hoverImage:
+      "https://images.unsplash.com/photo-1434389677669-e08b4cac3105?auto=format&fit=crop&w=600&q=85",
+  },
+  {
+    id: "7",
+    name: "The Raw Jean",
+    price: 72,
+    category: "Denim",
+    fabric: "Selvedge Denim",
+    color: "Raw Indigo",
+    handle: "raw-jean",
+    image:
+      "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=600&q=85",
+    imageAlt: "TODO: replace with brand photography — The Raw Jean in Raw Indigo",
+    hoverImage:
+      "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=600&q=85",
+  },
+];
