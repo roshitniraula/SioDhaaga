@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import Image from "next/image";
+import { useState, useEffect, useRef } from "react";
 import { Container } from "./ui";
 
+/* ── Icons ─────────────────────────────────────────────────────── */
 function IconSearch() {
   return (
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
@@ -12,7 +14,6 @@ function IconSearch() {
     </svg>
   );
 }
-
 function IconAccount() {
   return (
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
@@ -21,7 +22,6 @@ function IconAccount() {
     </svg>
   );
 }
-
 function IconCart({ count }: { count: number }) {
   return (
     <span className="relative flex items-center">
@@ -38,7 +38,6 @@ function IconCart({ count }: { count: number }) {
     </span>
   );
 }
-
 function IconMenu() {
   return (
     <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
@@ -46,7 +45,6 @@ function IconMenu() {
     </svg>
   );
 }
-
 function IconClose() {
   return (
     <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
@@ -54,43 +52,310 @@ function IconClose() {
     </svg>
   );
 }
+function IconChevron() {
+  return (
+    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true" className="inline ml-0.5 translate-y-px">
+      <path d="M2 4l3 3 3-3" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
 
-const navLinks = [
-  { label: "Women", href: "/shop/women" },
-  { label: "Men", href: "/shop/men" },
-  { label: "Hoodies", href: "/shop/hoodies" },
-  { label: "Denim", href: "/shop/denim" },
+/* ── Mega-nav data ──────────────────────────────────────────────── */
+type NavColumn = { heading: string; links: { label: string; href: string }[] };
+type NavDropdown = {
+  columns: NavColumn[];
+  editorial: { image: string; caption: string; href: string };
+};
+type NavItem = { label: string; href?: string; dropdown?: NavDropdown };
+
+const navItems: NavItem[] = [
+  {
+    label: "Women",
+    dropdown: {
+      columns: [
+        {
+          heading: "Shop",
+          links: [
+            { label: "New arrivals", href: "/shop/women/new" },
+            { label: "Best sellers", href: "/shop/women/best" },
+            { label: "The edit", href: "/shop/women" },
+            { label: "Everything", href: "/shop/women/all" },
+          ],
+        },
+        {
+          heading: "Categories",
+          links: [
+            { label: "Shirts & blouses", href: "/shop/women/shirts" },
+            { label: "Trousers", href: "/shop/women/trousers" },
+            { label: "Knitwear", href: "/shop/women/knitwear" },
+            { label: "Dresses", href: "/shop/women/dresses" },
+            { label: "Outerwear", href: "/shop/women/outerwear" },
+            { label: "Denim", href: "/shop/women/denim" },
+          ],
+        },
+        {
+          heading: "By fabric",
+          links: [
+            { label: "Washed linen", href: "/shop/women/linen" },
+            { label: "Cotton canvas", href: "/shop/women/cotton" },
+            { label: "Merino", href: "/shop/women/merino" },
+            { label: "Silk", href: "/shop/women/silk" },
+          ],
+        },
+      ],
+      editorial: {
+        // TODO: replace with brand photography — The Sable Shirt
+        image:
+          "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=400&q=85",
+        caption: "The Sable Shirt — Washed linen, made slowly.",
+        href: "/products/sable-shirt",
+      },
+    },
+  },
+  {
+    label: "Men",
+    dropdown: {
+      columns: [
+        {
+          heading: "Shop",
+          links: [
+            { label: "New arrivals", href: "/shop/men/new" },
+            { label: "Best sellers", href: "/shop/men/best" },
+            { label: "The edit", href: "/shop/men" },
+            { label: "Everything", href: "/shop/men/all" },
+          ],
+        },
+        {
+          heading: "Categories",
+          links: [
+            { label: "Shirts", href: "/shop/men/shirts" },
+            { label: "Trousers", href: "/shop/men/trousers" },
+            { label: "Knitwear", href: "/shop/men/knitwear" },
+            { label: "Outerwear", href: "/shop/men/outerwear" },
+            { label: "Tees", href: "/shop/men/tees" },
+            { label: "Denim", href: "/shop/men/denim" },
+          ],
+        },
+        {
+          heading: "By fabric",
+          links: [
+            { label: "Washed linen", href: "/shop/men/linen" },
+            { label: "Cotton canvas", href: "/shop/men/cotton" },
+            { label: "Brushed cotton", href: "/shop/men/brushed-cotton" },
+            { label: "Wool", href: "/shop/men/wool" },
+          ],
+        },
+      ],
+      editorial: {
+        // TODO: replace with brand photography — The Drift Trouser
+        image:
+          "https://images.unsplash.com/photo-1583744946564-b52ac1c389c8?auto=format&fit=crop&w=400&q=85",
+        caption: "The Drift Trouser — Cotton canvas, cut clean.",
+        href: "/products/drift-trouser",
+      },
+    },
+  },
+  {
+    label: "Hoodies",
+    dropdown: {
+      columns: [
+        {
+          heading: "Shop",
+          links: [
+            { label: "All hoodies", href: "/shop/hoodies" },
+            { label: "New arrivals", href: "/shop/hoodies/new" },
+            { label: "Heavyweight", href: "/shop/hoodies/heavyweight" },
+            { label: "Lightweight", href: "/shop/hoodies/lightweight" },
+          ],
+        },
+        {
+          heading: "For",
+          links: [
+            { label: "Women's hoodies", href: "/shop/women/hoodies" },
+            { label: "Men's hoodies", href: "/shop/men/hoodies" },
+            { label: "Unisex", href: "/shop/hoodies/unisex" },
+          ],
+        },
+        {
+          heading: "Finish",
+          links: [
+            { label: "Brushed cotton", href: "/shop/hoodies/brushed-cotton" },
+            { label: "French terry", href: "/shop/hoodies/french-terry" },
+            { label: "Fleece-lined", href: "/shop/hoodies/fleece" },
+          ],
+        },
+      ],
+      editorial: {
+        // TODO: replace with brand photography — The Still Hoodie
+        image:
+          "https://images.unsplash.com/photo-1556821840-3a63f15732ce?auto=format&fit=crop&w=400&q=85",
+        caption: "The Still Hoodie — Brushed cotton, built to outlast.",
+        href: "/products/still-hoodie",
+      },
+    },
+  },
+  {
+    label: "Denim",
+    dropdown: {
+      columns: [
+        {
+          heading: "Shop",
+          links: [
+            { label: "All denim", href: "/shop/denim" },
+            { label: "New arrivals", href: "/shop/denim/new" },
+            { label: "Jeans", href: "/shop/denim/jeans" },
+            { label: "Jackets", href: "/shop/denim/jackets" },
+          ],
+        },
+        {
+          heading: "Fit",
+          links: [
+            { label: "Straight", href: "/shop/denim/straight" },
+            { label: "Slim", href: "/shop/denim/slim" },
+            { label: "Relaxed", href: "/shop/denim/relaxed" },
+            { label: "Wide", href: "/shop/denim/wide" },
+          ],
+        },
+        {
+          heading: "Wash",
+          links: [
+            { label: "Raw indigo", href: "/shop/denim/raw" },
+            { label: "Stone wash", href: "/shop/denim/stone" },
+            { label: "Rinse", href: "/shop/denim/rinse" },
+            { label: "Black", href: "/shop/denim/black" },
+          ],
+        },
+      ],
+      editorial: {
+        // TODO: replace with brand photography — The Indigo Jean
+        image:
+          "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=400&q=85",
+        caption: "The Indigo Jean — Selvedge, ages with you.",
+        href: "/products/indigo-jean",
+      },
+    },
+  },
+  { label: "Journal", href: "/journal" },
 ];
 
+/* ── Mega-nav dropdown panel ────────────────────────────────────── */
+function MegaNavPanel({ dropdown }: { dropdown: NavDropdown }) {
+  return (
+    <div className="w-full bg-[--color-ivory] border-b border-[--color-line]">
+      <Container className="py-10">
+        <div className="flex gap-12">
+          {/* Columns */}
+          <div className="flex-1 grid grid-cols-3 gap-10">
+            {dropdown.columns.map((col) => (
+              <div key={col.heading}>
+                <p className="type-eyebrow text-[--color-muted] mb-5">{col.heading}</p>
+                <ul className="space-y-3">
+                  {col.links.map((link) => (
+                    <li key={link.label}>
+                      <Link
+                        href={link.href}
+                        className="type-small text-[--color-walnut] hover:text-[--color-sage] transition-colors duration-[400ms]"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+
+          {/* Editorial card */}
+          <Link
+            href={dropdown.editorial.href}
+            className="group relative w-48 shrink-0 overflow-hidden rounded-[2px] bg-[--color-bone]"
+          >
+            <Image
+              src={dropdown.editorial.image}
+              alt={dropdown.editorial.caption}
+              fill
+              className="object-cover transition-transform duration-[600ms] ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:scale-[1.03]"
+              sizes="192px"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#3D2E22]/60 via-transparent to-transparent" />
+            <p className="absolute bottom-0 left-0 right-0 p-4 type-small text-[--color-ivory] leading-snug">
+              {dropdown.editorial.caption}
+            </p>
+          </Link>
+        </div>
+      </Container>
+    </div>
+  );
+}
+
+/* ── Header ─────────────────────────────────────────────────────── */
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [activeMenu, setActiveMenu] = useState<string | null>(null);
+  const openTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const headerRef = useRef<HTMLElement>(null);
 
+  // Scroll detection
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Lock body scroll when mobile menu is open
+  // Mobile scroll lock
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
   }, [mobileOpen]);
 
-  const headerBg = scrolled
+  // Escape key closes dropdown
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setActiveMenu(null); };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, []);
+
+  // Click outside closes dropdown
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      if (headerRef.current && !headerRef.current.contains(e.target as Node)) {
+        setActiveMenu(null);
+      }
+    };
+    document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, []);
+
+  function handleNavEnter(label: string) {
+    if (openTimeoutRef.current) clearTimeout(openTimeoutRef.current);
+    openTimeoutRef.current = setTimeout(() => setActiveMenu(label), 150);
+  }
+
+  function handleNavLeave() {
+    if (openTimeoutRef.current) clearTimeout(openTimeoutRef.current);
+    setActiveMenu(null);
+  }
+
+  const showSolid = scrolled || !!activeMenu;
+  const headerBg = showSolid
     ? "bg-[--color-ivory] border-b border-[--color-line]"
     : "bg-transparent border-b border-transparent";
+
+  const activeDropdown = navItems.find((n) => n.label === activeMenu)?.dropdown;
 
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-[400ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${headerBg}`}
+        ref={headerRef}
+        className={`fixed top-0 left-0 right-0 z-50 transition-[background-color,border-color] duration-[400ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${headerBg}`}
+        onMouseLeave={handleNavLeave}
       >
+        {/* ── Nav bar ─────────────────────────────────────── */}
         <Container>
           <div className="flex items-center justify-between h-16 md:h-20">
 
-            {/* Mobile: hamburger left */}
+            {/* Mobile: hamburger */}
             <button
               className="md:hidden text-[--color-walnut] -ml-1 p-1"
               onClick={() => setMobileOpen(true)}
@@ -99,28 +364,44 @@ export function Header() {
               <IconMenu />
             </button>
 
-            {/* Wordmark — center on mobile, left on desktop */}
+            {/* Wordmark */}
             <Link
               href="/"
+              onClick={() => setActiveMenu(null)}
               className="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 font-[family-name:var(--font-cormorant)] text-[22px] tracking-[-0.01em] font-normal text-[--color-walnut] hover:text-[--color-walnut-soft] transition-colors duration-[400ms]"
             >
               SioDhaga
             </Link>
 
-            {/* Center nav — desktop only */}
+            {/* Center nav — desktop */}
             <nav className="hidden md:flex items-center gap-10">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  className="type-small text-[--color-walnut] hover:text-[--color-sage] transition-colors duration-[400ms]"
-                >
-                  {link.label}
-                </Link>
-              ))}
-              <span className="type-small text-[--color-muted] cursor-default select-none">
-                Journal
-              </span>
+              {navItems.map((item) =>
+                item.dropdown ? (
+                  <button
+                    key={item.label}
+                    onMouseEnter={() => handleNavEnter(item.label)}
+                    className={`type-small transition-colors duration-[400ms] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[--color-sage] ${
+                      activeMenu === item.label
+                        ? "text-[--color-sage]"
+                        : "text-[--color-walnut] hover:text-[--color-sage]"
+                    }`}
+                    aria-expanded={activeMenu === item.label}
+                    aria-haspopup="true"
+                  >
+                    {item.label}
+                    <IconChevron />
+                  </button>
+                ) : (
+                  <Link
+                    key={item.label}
+                    href={item.href ?? "#"}
+                    className="type-small text-[--color-muted] cursor-default select-none"
+                    aria-disabled="true"
+                  >
+                    {item.label}
+                  </Link>
+                )
+              )}
             </nav>
 
             {/* Right icons */}
@@ -138,17 +419,27 @@ export function Header() {
 
           </div>
         </Container>
+
+        {/* ── Mega-nav dropdown panel — desktop only ────── */}
+        <div
+          className={`hidden md:block overflow-hidden transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] motion-reduce:transition-none ${
+            activeDropdown
+              ? "opacity-100 translate-y-0 pointer-events-auto"
+              : "opacity-0 -translate-y-1 pointer-events-none"
+          }`}
+          style={{ maxHeight: activeDropdown ? "400px" : "0" }}
+        >
+          {activeDropdown && <MegaNavPanel dropdown={activeDropdown} />}
+        </div>
       </header>
 
-      {/* Mobile drawer */}
+      {/* ── Mobile drawer ────────────────────────────────── */}
       {mobileOpen && (
         <div className="fixed inset-0 z-[60] md:hidden">
-          {/* Backdrop */}
           <div
             className="absolute inset-0 bg-[--color-walnut]/40"
             onClick={() => setMobileOpen(false)}
           />
-          {/* Panel */}
           <div className="absolute inset-y-0 left-0 w-4/5 max-w-xs bg-[--color-ivory] flex flex-col px-8 py-10">
             <button
               className="self-end text-[--color-walnut] mb-10 -mr-2 p-1"
@@ -158,19 +449,20 @@ export function Header() {
               <IconClose />
             </button>
             <nav className="flex flex-col gap-8">
-              {navLinks.map((link) => (
+              {navItems.map((item) => (
                 <Link
-                  key={link.label}
-                  href={link.href}
+                  key={item.label}
+                  href={item.href ?? (item.dropdown ? `#` : "#")}
                   onClick={() => setMobileOpen(false)}
-                  className="type-h3 text-[--color-walnut] hover:text-[--color-sage] transition-colors duration-[400ms]"
+                  className={`type-h3 transition-colors duration-[400ms] ${
+                    item.href === "/journal"
+                      ? "text-[--color-muted]"
+                      : "text-[--color-walnut] hover:text-[--color-sage]"
+                  }`}
                 >
-                  {link.label}
+                  {item.label}
                 </Link>
               ))}
-              <span className="type-h3 text-[--color-muted] cursor-default">
-                Journal
-              </span>
             </nav>
           </div>
         </div>
