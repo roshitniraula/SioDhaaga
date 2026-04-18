@@ -9,6 +9,7 @@ export type Product = {
   image: string;
   imageAlt: string;
   hoverImage: string;
+  collections: string[]; // slugs: "women" | "men" | "hoodies" | "denim"
 };
 
 // TODO: replace with live Shopify data in Phase 3
@@ -21,6 +22,7 @@ export const featuredProducts: Product[] = [
     fabric: "Washed Linen",
     color: "Ivory",
     handle: "sable-shirt",
+    collections: ["women"],
     image:
       "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=600&q=85",
     imageAlt: "TODO: replace with brand photography — The Sable Shirt in Ivory",
@@ -35,6 +37,7 @@ export const featuredProducts: Product[] = [
     fabric: "Cotton Canvas",
     color: "Stone",
     handle: "drift-trouser",
+    collections: ["men"],
     image:
       "https://images.unsplash.com/photo-1583744946564-b52ac1c389c8?auto=format&fit=crop&w=600&q=85",
     imageAlt: "TODO: replace with brand photography — The Drift Trouser in Stone",
@@ -49,6 +52,7 @@ export const featuredProducts: Product[] = [
     fabric: "Brushed Cotton",
     color: "Bone",
     handle: "still-hoodie",
+    collections: ["hoodies", "women", "men"],
     image:
       "https://images.unsplash.com/photo-1556821840-3a63f15732ce?auto=format&fit=crop&w=600&q=85",
     imageAlt: "TODO: replace with brand photography — The Still Hoodie in Bone",
@@ -63,6 +67,7 @@ export const featuredProducts: Product[] = [
     fabric: "Selvedge Denim",
     color: "Indigo",
     handle: "indigo-jean",
+    collections: ["denim", "women", "men"],
     image:
       "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=600&q=85",
     imageAlt: "TODO: replace with brand photography — The Indigo Jean",
@@ -80,6 +85,7 @@ export const shopTheLookProducts: Product[] = [
     fabric: "Washed Linen",
     color: "Sand",
     handle: "linen-overshirt",
+    collections: ["women"],
     image:
       "https://images.unsplash.com/photo-1607522370275-f14206abe5d3?auto=format&fit=crop&w=600&q=85",
     imageAlt: "TODO: replace with brand photography — The Linen Overshirt in Sand",
@@ -94,6 +100,7 @@ export const shopTheLookProducts: Product[] = [
     fabric: "Merino Wool",
     color: "Oat",
     handle: "merino-crew",
+    collections: ["hoodies", "women", "men"],
     image:
       "https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&w=600&q=85",
     imageAlt: "TODO: replace with brand photography — The Merino Crew in Oat",
@@ -108,6 +115,7 @@ export const shopTheLookProducts: Product[] = [
     fabric: "Selvedge Denim",
     color: "Raw Indigo",
     handle: "raw-jean",
+    collections: ["denim", "women", "men"],
     image:
       "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=600&q=85",
     imageAlt: "TODO: replace with brand photography — The Raw Jean in Raw Indigo",
@@ -115,3 +123,9 @@ export const shopTheLookProducts: Product[] = [
       "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=600&q=85",
   },
 ];
+
+export const allProducts = [...featuredProducts, ...shopTheLookProducts];
+
+export function getProductsByCollection(slug: string): Product[] {
+  return allProducts.filter((p) => p.collections.includes(slug));
+}

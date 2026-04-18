@@ -241,7 +241,7 @@ const navItems: NavItem[] = [
 /* ── Mega-nav dropdown panel ────────────────────────────────────── */
 function MegaNavPanel({ dropdown }: { dropdown: NavDropdown }) {
   return (
-    <div className="w-full bg-[--color-ivory] border-b border-[--color-line]">
+    <div className="w-full bg-white border-b border-[--color-line]">
       <Container className="py-10">
         <div className="flex gap-12">
           {/* Columns */}
@@ -421,13 +421,10 @@ export function Header() {
         </Container>
 
         {/* ── Mega-nav dropdown panel — desktop only ────── */}
+        {/* max-height animation keeps panel fully opaque; no opacity transition */}
         <div
-          className={`hidden md:block overflow-hidden transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] motion-reduce:transition-none ${
-            activeDropdown
-              ? "opacity-100 translate-y-0 pointer-events-auto"
-              : "opacity-0 -translate-y-1 pointer-events-none"
-          }`}
-          style={{ maxHeight: activeDropdown ? "400px" : "0" }}
+          className="hidden md:block overflow-hidden transition-[max-height] duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] motion-reduce:transition-none"
+          style={{ maxHeight: activeDropdown ? "480px" : "0" }}
         >
           {activeDropdown && <MegaNavPanel dropdown={activeDropdown} />}
         </div>
