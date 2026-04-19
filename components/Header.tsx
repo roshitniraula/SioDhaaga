@@ -99,8 +99,7 @@ const navItems: NavItem[] = [
         },
       ],
       editorial: {
-        // TODO: replace with brand photography — The Sable Shirt (linen shirt, warm neutral light)
-        image: "https://images.unsplash.com/photo-1551489186-cf8726f514f8?auto=format&fit=crop&w=800&q=90",
+        image: "https://images.unsplash.com/photo-1602573991155-21f0143bb45c?auto=format&fit=crop&w=800&q=90",
         caption: "The Sable Shirt — Washed linen, made slowly.",
         href: "/products/sable-shirt",
       },
@@ -146,8 +145,7 @@ const navItems: NavItem[] = [
         },
       ],
       editorial: {
-        // TODO: replace with brand photography — The Drift Trouser (cotton trousers, neutral warm)
-        image: "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?auto=format&fit=crop&w=800&q=90",
+        image: "https://images.unsplash.com/photo-1617137968427-85924c800a22?auto=format&fit=crop&w=800&q=90",
         caption: "The Drift Trouser — Cotton canvas, cut clean.",
         href: "/products/drift-trouser",
       },
@@ -189,8 +187,7 @@ const navItems: NavItem[] = [
         },
       ],
       editorial: {
-        // TODO: replace with brand photography — The Still Hoodie (cream hoodie, warm light)
-        image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&w=800&q=90",
+        image: "https://images.unsplash.com/photo-1556821840-3a63f15732ce?auto=format&fit=crop&w=800&q=90",
         caption: "The Still Hoodie — Brushed cotton, built to outlast.",
         href: "/products/still-hoodie",
       },
@@ -234,8 +231,7 @@ const navItems: NavItem[] = [
         },
       ],
       editorial: {
-        // TODO: replace with brand photography — The Indigo Jean (raw indigo denim fabric close-up)
-        image: "https://images.unsplash.com/photo-1588099768523-f4e6a5679d88?auto=format&fit=crop&w=800&q=90",
+        image: "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=800&q=90",
         caption: "The Indigo Jean — Selvedge, ages with you.",
         href: "/products/indigo-jean",
       },
@@ -291,19 +287,24 @@ function MegaNavPanel({ dropdown }: { dropdown: NavDropdown }) {
       className="w-full border-b border-[rgba(60,45,30,0.08)]"
       style={{ backgroundColor: "#F7F4EE" }}
     >
-      <Container className="py-10">
-        <div className="flex gap-12">
+      <Container className="py-12">
+        <div className="flex gap-16">
           {/* Columns */}
-          <div className="flex-1 grid grid-cols-3 gap-10">
+          <div className="flex-1 grid grid-cols-3 gap-16">
             {dropdown.columns.map((col) => (
               <div key={col.heading}>
-                <p className="type-eyebrow text-[--color-muted] mb-5">{col.heading}</p>
+                <p
+                  className="type-eyebrow mb-5"
+                  style={{ fontSize: 11, letterSpacing: "0.1em", color: "#9A8F80" }}
+                >
+                  {col.heading}
+                </p>
                 <ul className="space-y-3">
                   {col.links.map((link) => (
                     <li key={link.label}>
                       <Link
                         href={link.href}
-                        className="type-small text-[--color-walnut] hover:text-[--color-sage] transition-colors duration-[400ms]"
+                        className="relative text-[15px] leading-snug text-[#2A2420] hover:text-[#8A9282] transition-colors duration-[400ms] after:absolute after:bottom-0 after:left-0 after:h-px after:bg-current after:w-0 hover:after:w-full after:transition-[width] after:duration-200"
                       >
                         {link.label}
                       </Link>
@@ -314,28 +315,28 @@ function MegaNavPanel({ dropdown }: { dropdown: NavDropdown }) {
             ))}
           </div>
 
-          {/* Editorial card — 4:5 portrait, warm fabric/garment image */}
+          {/* Editorial card — portrait, warm fabric/garment image */}
           <Link
             href={dropdown.editorial.href}
-            className="group relative shrink-0 overflow-hidden rounded-[2px] bg-[--color-bone]"
-            style={{ width: 192, height: 240 }}
+            className="group relative shrink-0 overflow-hidden rounded-[2px]"
+            style={{ width: 260, height: 320, backgroundColor: "#EDE6DA" }}
           >
             <Image
               src={dropdown.editorial.image}
               alt={dropdown.editorial.caption}
               fill
               className="object-cover transition-transform duration-[600ms] ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:scale-[1.03]"
-              sizes="192px"
+              sizes="260px"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#3D2E22]/70 via-transparent to-transparent" />
-            <p className="absolute bottom-0 left-0 right-0 p-4 type-small text-[--color-ivory] leading-snug">
+            <p className="absolute bottom-0 left-0 right-0 p-6 type-small text-[--color-ivory] leading-snug">
               {dropdown.editorial.caption}
             </p>
           </Link>
         </div>
 
-        {/* Utility footer row — inside the panel, below the content */}
-        <div className="flex items-center justify-between mt-8 pt-5 border-t border-[rgba(60,45,30,0.06)]">
+        {/* Utility footer row */}
+        <div className="flex items-center justify-between mt-10 pt-8 border-t border-[rgba(60,45,30,0.06)]">
           <Link
             href="/shop"
             className="inline-flex items-center h-8 px-4 type-eyebrow text-[10px] tracking-[0.12em] transition-colors"
@@ -427,7 +428,8 @@ export function Header() {
     <>
       <header
         ref={headerRef}
-        className={`fixed top-0 left-0 right-0 z-50 bg-[--color-header] border-b border-[rgba(60,45,30,0.08)] transition-shadow duration-300 ${shadowClass}`}
+        className={`sticky top-0 z-50 w-full border-b border-[rgba(60,45,30,0.08)] transition-shadow duration-300 ${shadowClass}`}
+        style={{ backgroundColor: "#F7F4EE" }}
         onMouseLeave={handleNavLeave}
       >
         <Container>
@@ -488,11 +490,11 @@ export function Header() {
           </div>
         </Container>
 
-        {/* Mega-nav dropdown — wrapper has explicit bg so it's opaque even before MegaNavPanel mounts */}
+        {/* Mega-nav dropdown — absolutely positioned so it overlays page content */}
         <div
-          className="hidden md:block overflow-hidden transition-[max-height] duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] motion-reduce:transition-none"
+          className="absolute left-0 right-0 top-full hidden md:block overflow-hidden transition-[max-height] duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] motion-reduce:transition-none"
           style={{
-            maxHeight: activeDropdown ? "600px" : "0",
+            maxHeight: activeDropdown ? "640px" : "0",
             backgroundColor: "#F7F4EE",
           }}
         >
@@ -507,7 +509,7 @@ export function Header() {
             className="absolute inset-0 bg-[--color-walnut]/40"
             onClick={() => setMobileOpen(false)}
           />
-          <div className="absolute inset-y-0 left-0 w-4/5 max-w-xs bg-[--color-header] flex flex-col px-8 py-10">
+          <div className="absolute inset-y-0 left-0 w-4/5 max-w-xs flex flex-col px-8 py-10" style={{ backgroundColor: "#F7F4EE" }}>
             <button
               className="self-end text-[--color-walnut] mb-10 -mr-2 p-1"
               onClick={() => setMobileOpen(false)}

@@ -14,12 +14,10 @@ type Slide = {
   href: string;
 };
 
-// TODO: replace with brand photography — all hero images
 const slides: Slide[] = [
   {
-    // TODO: replace with brand photography — linen fabric close-up, warm window light
     image:
-      "https://images.unsplash.com/photo-1528360983277-13d401cdc186?auto=format&fit=crop&w=1800&q=90",
+      "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=1800&q=90",
     eyebrow: "New season",
     headline: "A thread of honest luxury.",
     sub: "Luxury-grade garments, priced without the markup.",
@@ -27,9 +25,8 @@ const slides: Slide[] = [
     href: "/shop",
   },
   {
-    // TODO: replace with brand photography — linen shirt sleeve, window light detail
     image:
-      "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=1800&q=90",
+      "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=1800&q=90",
     eyebrow: "The edit",
     headline: "Softer than it looks.",
     sub: "Washed linen, cut slowly, finished by hand.",
@@ -37,9 +34,8 @@ const slides: Slide[] = [
     href: "/shop/women",
   },
   {
-    // TODO: replace with brand photography — indigo selvedge denim texture
     image:
-      "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=1800&q=90",
+      "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=1800&q=90",
     eyebrow: "Denim",
     headline: "Selvedge, without the sermon.",
     sub: "Indigo that ages with you, not against you.",
@@ -47,9 +43,8 @@ const slides: Slide[] = [
     href: "/shop/denim",
   },
   {
-    // TODO: replace with brand photography — folded cotton fabric stack, warm atelier light
     image:
-      "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?auto=format&fit=crop&w=1800&q=90",
+      "https://images.unsplash.com/photo-1583744946564-b52ac1c389c8?auto=format&fit=crop&w=1800&q=90",
     eyebrow: "How we price",
     headline: "One price. Always.",
     sub: "No sales. No inflated MSRPs. What it costs to make it well.",
@@ -57,7 +52,6 @@ const slides: Slide[] = [
     href: "/how-we-price",
   },
   {
-    // TODO: replace with brand photography — brushed cotton hoodie texture, warm light
     image:
       "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=1800&q=90",
     eyebrow: "Hoodies",
